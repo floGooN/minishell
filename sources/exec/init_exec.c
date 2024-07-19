@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 13:15:17 by florian           #+#    #+#             */
-/*   Updated: 2024/07/10 20:16:24 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/12 09:05:27 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static int  init_structure(t_data *data)
 
 static int  is_executable_path(t_data *data)
 {
+    if (!data->args.tab)
+        return (0);
     if (!ft_strlen(data->args.tab[0]))
         return (0);
     if (data->args.tab[0][0] == '/' || data->args.tab[0][0] == '.')
