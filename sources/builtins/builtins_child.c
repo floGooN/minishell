@@ -6,61 +6,60 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 08:28:16 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/10 13:55:43 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/18 11:54:38 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-int ft_echo(char **args)
+int	ft_echo(t_data *data)
 {
-    int flag = 0;
-    int i = 1;
-
-    if (args[1] && ft_strcmp(args[1], "-n") == 0)
-    {
-        flag = 1;
-        i++;
-    }
-    while (args[i])
-    {
-        printf("%s", args[i]);
-        i++;
-    }
-    if (!flag)
-        printf("\n");
-    return (0);
-}
-
-int	ft_env(char **env)
-{
+	int	flag;
 	int	i;
-	//env also sets envronment variables. 
-	i = 0;
-    while (env[i])
+
+	flag = 0;
+	i = 1;
+	if (data->args.tab[1] && ft_strcmp(data->args.tab[1], "-n") == 0)
 	{
-        printf("%s\n", env[i]);
+		flag = 1;
 		i++;
 	}
-    return 0;
+	while (data->args.tab[i])
+	{
+		printf("%s", data->args.tab[i]);
+		if (data->args.tab[i + 1])
+			ft_printf(" ");
+		i++;
+	}
+	if (!flag)
+		ft_printf("\n");
+	return (0);
 }
 
+int	ft_env(t_data *data)
+{
+	int	i;
 
+	i = 0;
+	while (data->env.tab[i])
+	{
+		ft_printf("%s\n", data->env.tab[i]);
+		i++;
+	}
+	return (0);
+}
 
 int	ft_pwd(void)
 {
 	char	cwd[1024];
-	char *temp;
+	char	*temp;
 
-	ft_printf("My pwd\n"); //last exit code
 	temp = getcwd(cwd, sizeof(cwd));
 	if (temp != NULL)
 	{
-		printf("%s\n", cwd);
+		ft_printf("%s\n", cwd);
 		return (0);
 	}
 	else
-	{
 		return (1);
-	}
 }
