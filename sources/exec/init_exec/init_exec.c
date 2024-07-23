@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 13:15:17 by florian           #+#    #+#             */
-/*   Updated: 2024/07/23 11:58:40 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:25:02 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int init_exec(t_data *data, int tab_size)
 	i = 0;
 	while (i < tab_size)
 	{
+        data[i].tab_size = tab_size;
 		ret_value = expand_management(&(data[i]), data[0].env.tab, \
                                         data[0].exit_status);
 		if (ret_value)

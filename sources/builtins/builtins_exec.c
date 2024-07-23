@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:39:26 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/23 12:18:19 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:05:00 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ int exec_one_built(t_data *data)
     int save_fd[2];
 
     save_std(data, save_fd);
-    if (manage_redirection(data, 1, 0, NULL))
-    {
-        data[0].exit_status = -1;
-        return (data[0].exit_status);
-    }
+    // if (manage_redirection(data, 1, 0, NULL))
+    // {
+    //     data[0].exit_status = -1;
+    //     return (data[0].exit_status);
+    // }
     if (ft_strcmp(data->args.tab[0], "pwd") == 0)
 		data[0].exit_status = ft_pwd();
 	else if (ft_strcmp(data->args.tab[0], "echo") == 0)
@@ -39,7 +39,7 @@ int exec_one_built(t_data *data)
     else if (ft_strcmp(data[0].args.tab[0], "export") == 0)
     {
 		static t_table	export;
-		
+
 		if (!export.tab)
 			init_exported_env(data, &export);
         if (data[0].args.tab[1] == NULL)
@@ -70,7 +70,7 @@ int	exec_builtin(t_data *data, int tab_size, int i, int **fd)
     else if (ft_strcmp(data[i].args.tab[0], "export") == 0)
     {
 		static t_table	export;
-		
+
 		if (!export.tab)
 			init_exported_env(data, &export);
         if (data[i].args.tab[1] == NULL)

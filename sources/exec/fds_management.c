@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fds_management.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:38:31 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/23 10:52:11 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/23 15:51:40 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,6 @@ int  ft_dup(int read_fd, int write_fd)
     }
   }
   return(0);
-}
-
-int close_fds(int *in_out_fd)
-{
-	int status;
-
-	status = 0;
-    if (in_out_fd[0] > STDIN_FILENO)
-        if (close(in_out_fd[0]) == -1)
-            status = -1;
-    if (in_out_fd[1] > STDOUT_FILENO)
-        if (close(in_out_fd[1]) == -1)
-            status = -1;
-    in_out_fd[0] = -1;
-    in_out_fd[1] = -1;
-	if (status == -1)
-		perror("close_fds :");
-	return (status);
 }
 
 static int fork_redir(t_data data, int *fds, int last_read)
@@ -104,27 +86,34 @@ int exec_redirection(t_data data, int *fds, int last_read)
     return (fork_redir(data, fds, last_read));
 }
 
-int manage_redirection(t_data *data, int tab_size, int i, int **fd)
+int manage_redirection(t_data *data, int i, int **fd, int last_read)
 {
     int ret_value;
 
-    if (tab_size == 1)
+    if (i == 0)
     {
-        if (data->input.size || data->output.size)
-            return (ft_dup(data->in_out_fd[0], data->in_out_fd[1]));
-        return (0);
-    }
-
-    if (i < tab_size - 1 && fd)
-    {
-        if (i != 0)
-            ret_value = exec_redirection(data[i], fd[i], fd[i - 1][0]);
+        if (data[i].output.size > 0) // outfile -> write in file
+            dup2(data[i].in_out_fd[1], STDOUT_FILENO);
         else
-            ret_value = exec_redirection(data[i], fd[i], 0);
+            dup2(fd[i][1], STDOUT_FILENO); // else write in pipe
     }
-    else if (fd)
-        ret_value = exec_redirection(data[i], NULL, fd[i - 1][0]);
+    else if (i < data[i].tab_size - 1)
+    {
+        if (data[i].input.size > 0) // if infile -> read from file
+            dup2(data[i].in_out_fd[0], STDIN_FILENO);
+        else
+            dup2(last_read, STDIN_FILENO); // else read from last_read
+        if (data[i].output.size > 0)
+            dup2(data[i].in_out_fd[1], STDOUT_FILENO); // if outfile -> write in outfile
+        else
+            dup2(fd[i][1], STDOUT_FILENO); // else -> write in pipe
+    }
     else
-        ret_value = exec_redirection(data[i], NULL, 0);
-    return (ret_value);
+    {
+        if (data[i].input.size)
+            dup2(data[i].in_out_fd[0], STDIN_FILENO);
+        else
+            dup2(last_read, STDIN_FILENO);
+    }
+    return (0);
 }

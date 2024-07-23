@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:58:22 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/23 13:03:02 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/23 17:07:22 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,14 @@ int     heredoc_management(t_data *data, int tab_size);
 /*===========================fds_management.c===============================*/
 
 int     ft_dup(int read_fd, int write_fd);
-int     close_fds(int *in_out_fd);
 int     **init_pipe(t_data *data, int size);
-int     manage_redirection(t_data *data, int tab_size, int i, int **fd);
 void    free_pipes(int **tab, int size);
 int     close_pipes(int **fds, int size, int i_start, int last_fd);
 int     ft_getenv(char *word, char **env, char **var_content);
 void    set_env(char *var, char *cwd, char **env);
 char    *var_exist(char *word, char **env);
-int     wait_all(t_data *data, int tab_size, int pid);
+int     wait_all(t_data *data, int tab_size, int pid, int **fd);
 int     init_exec(t_data *data, int tab_size);
-void print_fd_array(int **fds, int size, char *message);
-void print_fd_operation(char *operation, int fd);
 
 /*===========================exec_one_utils.c===============================*/
 
@@ -79,5 +75,9 @@ int	save_std_fileno(t_data *data, int saved_fd[]);
 int redir_file(t_data *data);
 int	reset_std_fileno(t_data *data, int saved_fd[]);
 int	close_all_redir(t_data *data, int saved_std[]);
+
+/*===========================exec_one_utils.c===============================*/
+
+void     exec_builtin_child(t_data *data, int i, int **fd, int last_read);
 
 #endif
