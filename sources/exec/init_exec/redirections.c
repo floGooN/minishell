@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 12:47:54 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/23 11:55:11 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:09:55 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	define_input_fd(t_table infile, t_table heredocs)
 
   if (arrow_count(infile.tab[(infile.size - 1)], '<') == 2)
   {
-    input_fd = open(heredocs.tab[heredocs.size - 1], O_RDONLY | O_CLOEXEC);
+    input_fd = open(heredocs.tab[heredocs.size - 1], O_RDONLY | __O_CLOEXEC);
     if (input_fd == -1)
       perror("open heredoc file");
     return (input_fd);
@@ -27,7 +27,7 @@ static int	define_input_fd(t_table infile, t_table heredocs)
   inputfile = skip_redir_symbol(infile.tab[(infile.size - 1)], 0);
   if (!inputfile)
     return (ft_perror("error-> alloc inputfile\n"), -1);
-  input_fd = open(inputfile, O_RDONLY | O_CLOEXEC);
+  input_fd = open(inputfile, O_RDONLY | __O_CLOEXEC);
   if (input_fd == -1)
     perror("open infile ");
   free(inputfile);
@@ -57,9 +57,9 @@ static int	redir_output(t_data *data)
       if (!output_file)
           return (-1);
       if (arrow_count(data->output.tab[(data->output.size - 1)], '>') == 1)
-          output_fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0644);
+          output_fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC | __O_CLOEXEC, 0644);
       else if (arrow_count(data->output.tab[(data->output.size - 1)], '>') == 2)
-          output_fd = open(output_file, O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC, 0644);
+          output_fd = open(output_file, O_WRONLY | O_CREAT | O_APPEND | __O_CLOEXEC, 0644);
       else
           return (ft_perror("unexpected \'>\' token\n"), -2);
       if (output_fd == -1)

@@ -6,7 +6,7 @@
 #    By: florian <florian@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/03 11:07:17 by fberthou          #+#    #+#              #
-#    Updated: 2024/07/23 17:02:00 by florian          ###   ########.fr        #
+#    Updated: 2024/07/23 17:59:59 by florian          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,10 +70,11 @@ SRC		=	$(MAIN_PATH)/main.c $(MAIN_PATH)/utils.c $(MAIN_PATH)/sig_manager.c\
 			$(EXEC_PATH)/exec_one.c $(EXEC_PATH)/exec_one_utils.c \
 			\
 			$(INIT_EXEC_PATH)/init_exec.c $(INIT_EXEC_PATH)/heredoc.c $(INIT_EXEC_PATH)/build_exec_path.c \
-			$(INIT_EXEC_PATH)/exec_builtin_child.c $(INIT_EXEC_PATH)/redirections_utils.c \
+			$(INIT_EXEC_PATH)/redirections.c $(INIT_EXEC_PATH)/redirections_utils.c \
 			\
 			$(BUILTINS_PATH)/builtins_parent.c $(BUILTINS_PATH)/builtins_child.c $(BUILTINS_PATH)/builtins_utils.c \
-			$(BUILTINS_PATH)/builtins_exec.c $(BUILTINS_PATH)/redirection.c \
+			$(BUILTINS_PATH)/builtins_exec.c \
+			$(BUILTINS_PATH)/exec_builtin_child.c \
 			\
 			$(EXPORT_PATH)/export_utils.c $(EXPORT_PATH)/export_update.c $(EXPORT_PATH)/export_process.c
 

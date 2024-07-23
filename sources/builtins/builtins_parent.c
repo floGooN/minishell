@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_parent.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 08:27:25 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/18 11:03:43 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:17:41 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int ft_cd(t_data *data)
 	{
         if (ft_getenv("OLDPWD", data->env.tab, &new_dir) != 0)
             return (ft_putstr_fd("cd: OLDPWD not set\\n", 2), -1);
-        ft_printf("%s\\n", new_dir); 
+        ft_printf("%s\\n", new_dir);
     }
 	else
         new_dir = data->args.tab[1];
@@ -42,23 +42,16 @@ int ft_cd(t_data *data)
     return (0);
 }
 
-
-
-//copie pour export, copie env.
-//buffer static export (t_table)
-//si entree non complete, copie unisuqment dans export + error message print_error
-//si entree complete : ok pour copie dans env ++ export.
-
 int ft_unset(t_data *data)
 {
     int i;
     int j;
 	int k;
 
-    i = 1; 
+    i = 1;
     while (i < data->args.size)
     {
-        j = 0; 
+        j = 0;
         while (data->env.tab[j])
         {
             if (ft_strncmp(data->env.tab[j], data->args.tab[i], ft_strlen(data->args.tab[i])) == 0)
@@ -78,9 +71,8 @@ int ft_unset(t_data *data)
         }
         i++;
     }
-    return 0; 
+    return 0;
 }
-
 
 void	ft_exit(t_data *data, int tab_size, int last_status)
 {
@@ -112,6 +104,3 @@ void	ft_exit(t_data *data, int tab_size, int last_status)
 	free_struct(data, tab_size);
 	exit(status);
 }
-
-//close_fds --> input output files.
-//free_pipes -->  close pipes, free pipe_ptr.

@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/23 17:00:03 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/23 19:04:46 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int close_in_out_files(t_data *data)
 
 int parent_routine(t_data *data, int i, int **fd, int *last_read)
 {
-    if (!i)
+    if (i == 0)
     {
         if (close(fd[i][1]) == -1)
             perror("close in parent i == 0 ");
@@ -78,6 +78,8 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
                 return (1);
             if (execve(data[i].cmd_path, data[i].args.tab, data[i].env.tab) == -1)
                 exit(EXIT_FAILURE);
+            write(2, "ICI\n", 4);
+            exit(EXIT_SUCCESS);
         }
         else if (pid > 0)
         {

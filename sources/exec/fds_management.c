@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:38:31 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/23 15:51:40 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/23 19:32:05 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,28 +92,28 @@ int manage_redirection(t_data *data, int i, int **fd, int last_read)
 
     if (i == 0)
     {
-        if (data[i].output.size > 0) // outfile -> write in file
-            dup2(data[i].in_out_fd[1], STDOUT_FILENO);
+        if (data[i].output.size > 0)
+            ft_dup(data[i].in_out_fd[0], data[i].in_out_fd[1]);
         else
-            dup2(fd[i][1], STDOUT_FILENO); // else write in pipe
+            ft_dup(data[i].in_out_fd[0], fd[i][1]);
     }
     else if (i < data[i].tab_size - 1)
     {
-        if (data[i].input.size > 0) // if infile -> read from file
-            dup2(data[i].in_out_fd[0], STDIN_FILENO);
+        if (data[i].input.size > 0 && data[i].output.size > 0)
+            ft_dup(data[i].in_out_fd[0], data[i].in_out_fd[1]);
+        else if (data[i].input.size > 0)
+            ft_dup(data[i].in_out_fd[0], fd[i][1]);
+        else if (data[i].output.size > 0)
+            ft_dup(last_read, data[i].in_out_fd[1]);
         else
-            dup2(last_read, STDIN_FILENO); // else read from last_read
-        if (data[i].output.size > 0)
-            dup2(data[i].in_out_fd[1], STDOUT_FILENO); // if outfile -> write in outfile
-        else
-            dup2(fd[i][1], STDOUT_FILENO); // else -> write in pipe
+            ft_dup(last_read, fd[i][1]);
     }
     else
     {
-        if (data[i].input.size)
-            dup2(data[i].in_out_fd[0], STDIN_FILENO);
+        if (data[i].input.size > 0)
+            ft_dup(data[i].in_out_fd[0], data[i].in_out_fd[1]);
         else
-            dup2(last_read, STDIN_FILENO);
+            ft_dup(last_read, data[i].in_out_fd[1]);
     }
     return (0);
 }

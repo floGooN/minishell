@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:50:56 by florian           #+#    #+#             */
-/*   Updated: 2024/07/04 15:51:39 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/23 18:11:01 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int new_tmp_file(t_table heredoc, int hdocs_i)
   heredoc.tab[hdocs_i] = ft_strdup(tmp);
   if (!heredoc.tab[hdocs_i])
     return (ft_perror("error-> strdup heredoc\n"), -1);
-  fd2 = open(heredoc.tab[hdocs_i], O_CREAT | O_RDWR | O_TRUNC, 0644); // have to test with O_TRUNC
+  fd2 = open(heredoc.tab[hdocs_i], O_CREAT | O_RDWR | O_TRUNC, 0644);
   if (fd2 == -1)
     return (perror("open heredoc file :"), -2);
   return (fd2);
@@ -130,9 +130,9 @@ int	heredoc_management(t_data *data, int tab_size)
   {
     ret_value = init_heredocs(&(data[i]));
     if (ret_value == -1)
-      return (ret_value); // crash -> malloc error
+      return (ret_value);
     if (big_loop(&(data[i])) == -1)
-      return (-1); // crash -> malloc error
+      return (-1);
     i++;
   }
   return (0);
