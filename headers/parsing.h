@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jean-micheldusserre <jean-micheldusserr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 08:09:19 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/18 12:27:29 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/16 11:02:33 by jean-michel      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSING_H
 # define PARSING_H
 
-# include "includes.h"
+#include "includes.h"
 
 // main/utils.c
 void	free_tab(t_table *tab, int start);

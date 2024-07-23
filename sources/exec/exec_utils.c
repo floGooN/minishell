@@ -3,53 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:59:06 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/18 12:28:48 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/23 11:33:37 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-int	count_p_process(t_data *data, int tab_size)
+int wait_all(t_data *data, int tab_size, int pid)
 {
-	int	count;
-	int	i;
-
-	i = 0;
-	count = 0;
-	while (i < tab_size)
-	{
-		if (is_builtin_parent(&data[i]))
-			count++;
-		i++;
-	}
-	return (count);
-}
-
-int	wait_all(t_data *data, int tab_size, int pid)
-{
-	int	i;
-
-	i = -1;
-	if (!is_builtin_parent(&data[tab_size - 1]))
-	{
-		if (waitpid(pid, &(data[0].exit_status), 0) == -1)
-			return (perror("wait_all waitpid() "), -1);
-		tab_size--;
-		if (WIFEXITED(data[0].exit_status))
-			data[0].exit_status = WEXITSTATUS(data[0].exit_status);
-		else if (WIFSIGNALED(data[0].exit_status))
-			data[0].exit_status = WTERMSIG(data[0].exit_status);
-		else
-			data[0].exit_status = -1;
-	}
-	tab_size -= count_p_process(data, tab_size);
-	while (++i < tab_size)
-		if (wait(NULL) == -1)
-			return (perror("wait_all wait() "), -1);
-	return (0);
+    int i;
+    i = -1;
+    if (tab_size)
+    {
+        if (waitpid(pid, &(data[0].exit_status), 0) == -1)
+            return (perror("wait_all waitpid() "), -1);
+        tab_size--;
+        if (!is_builtin(&data[tab_size - 1]))
+        {
+            if (WIFEXITED(data[0].exit_status))
+                data[0].exit_status = WEXITSTATUS(data[0].exit_status);
+            else if (WIFSIGNALED(data[0].exit_status))
+                data[0].exit_status = WTERMSIG(data[0].exit_status);
+            else
+                data[0].exit_status = -1;
+        }
+    }
+    if (tab_size > 1)
+    {
+        while (++i < tab_size)
+            if (wait(NULL) == -1)
+                return (perror("wait_all wait() "), -1);
+    }
+    return (0);
 }
 
 int	ft_strcmp(char *s1, char *s2)

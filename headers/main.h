@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 11:03:18 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/18 12:27:33 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/05/27 08:17:28 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAIN_H
 # define MAIN_H
 
-# define INIT_ERROR "error -> env initialisation"
+#define INIT_ERROR "error -> env initialisation"
 
 #endif

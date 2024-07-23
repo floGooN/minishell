@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jean-micheldusserre <jean-micheldusserr    +#+  +:+       +#+         #
+#    By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/03 11:07:17 by fberthou          #+#    #+#              #
-#    Updated: 2024/07/16 09:27:32 by jean-michel      ###   ########.fr        #
+#    Updated: 2024/07/23 13:06:20 by fberthou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ BUILD_EXPORT_PATH		= $(BUILD_BUILTINS_PATH)/export
 
 # --- COMPILATION FLAGS --- #
 LIB_FLAGS	=	-I$(LIBFT_HDR_PATH)
-COMPFLAGS	=	-I$(HDR_PATH) $(LIB_FLAGS) -g # -Wall -Wextra -Werror
+COMPFLAGS	=	-I$(HDR_PATH) $(LIB_FLAGS) -g3 # -Wall -Wextra -Werror
 
 SRC		=	$(MAIN_PATH)/main.c $(MAIN_PATH)/utils.c $(MAIN_PATH)/sig_manager.c\
 			\
@@ -58,10 +58,10 @@ SRC		=	$(MAIN_PATH)/main.c $(MAIN_PATH)/utils.c $(MAIN_PATH)/sig_manager.c\
 			\
 			$(EXEC_PATH)/exec.c $(EXEC_PATH)/init_exec.c $(EXEC_PATH)/build_exec_path.c $(EXEC_PATH)/exec_utils.c \
 			$(EXEC_PATH)/redirections.c $(EXEC_PATH)/redirections_utils.c $(EXEC_PATH)/fds_management.c \
-			$(EXEC_PATH)/heredoc.c	$(EXEC_PATH)/pipe.c	 \
+			$(EXEC_PATH)/heredoc.c	$(EXEC_PATH)/pipe.c	$(EXEC_PATH)/exec_one.c $(EXEC_PATH)/exec_one_utils.c \
 			\
 			$(BUILTINS_PATH)/builtins_parent.c $(BUILTINS_PATH)/builtins_child.c $(BUILTINS_PATH)/builtins_utils.c \
-			$(BUILTINS_PATH)/builtins_exec.c \
+			$(BUILTINS_PATH)/builtins_exec.c $(BUILTINS_PATH)/redirection.c \
 			\
 			$(EXPORT_PATH)/export_utils.c $(EXPORT_PATH)/export_update.c $(EXPORT_PATH)/export_process.c
 

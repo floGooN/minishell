@@ -3,114 +3,128 @@
 /*                                                        :::      ::::::::   */
 /*   fds_management.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:38:31 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/18 12:31:05 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/23 10:52:11 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-int	ft_dup(int read_fd, int write_fd)
+int  ft_dup(int read_fd, int write_fd)
 {
-	if (read_fd > STDIN_FILENO)
-	{
-		if (dup2(read_fd, STDIN_FILENO) == -1)
-		{
-			if (write_fd > STDOUT_FILENO)
-				close(write_fd);
-			return (close(read_fd), perror("dup read_fd "), -1);
-		}
-	}
-	if (write_fd > STDOUT_FILENO)
-	{
-		if (dup2(write_fd, STDOUT_FILENO) == -1)
-		{
-			if (read_fd > STDIN_FILENO)
-				close(read_fd);
-			return (close(write_fd), perror("dup write_fd "), -1);
-		}
-	}
-	return (0);
+  if (read_fd > STDIN_FILENO)
+  {
+    if (dup2(read_fd, STDIN_FILENO) == -1)
+    {
+      if (write_fd > STDOUT_FILENO)
+        close(write_fd);
+      return (close(read_fd), perror("dup read_fd "), -1);
+    }
+  }
+  if (write_fd > STDOUT_FILENO)
+  {
+    if (dup2(write_fd, STDOUT_FILENO) == -1)
+    {
+      if (read_fd > STDIN_FILENO)
+        close(read_fd);
+      return (close(write_fd), perror("dup write_fd "), -1);
+    }
+  }
+  return(0);
 }
 
-int	close_fds(int *in_out_fd)
+int close_fds(int *in_out_fd)
 {
-	int	status;
+	int status;
 
 	status = 0;
-	if (in_out_fd[0] > STDIN_FILENO)
-		if (close(in_out_fd[0]) == -1)
-			status = -1;
-	if (in_out_fd[1] > STDOUT_FILENO)
-		if (close(in_out_fd[1]) == -1)
-			status = -1;
-	in_out_fd[0] = -1;
-	in_out_fd[1] = -1;
+    if (in_out_fd[0] > STDIN_FILENO)
+        if (close(in_out_fd[0]) == -1)
+            status = -1;
+    if (in_out_fd[1] > STDOUT_FILENO)
+        if (close(in_out_fd[1]) == -1)
+            status = -1;
+    in_out_fd[0] = -1;
+    in_out_fd[1] = -1;
 	if (status == -1)
 		perror("close_fds :");
 	return (status);
 }
 
-static int	fork_redir(t_data data, int *fds, int last_read)
+static int fork_redir(t_data data, int *fds, int last_read)
 {
-	if (fds != NULL)
-	{
-		if (!data.input.size && !data.output.size && ft_dup(last_read, fds[1]) == -1)
-			return (-1);
-		else if (data.input.size && !data.output.size && ft_dup(data.in_out_fd[0], fds[1]) == -1)
-			return (-1);
-		else if (!data.input.size && data.output.size && ft_dup(last_read, data.in_out_fd[1]) == -1)
-			return (-1);
-	}
-	else
-	{
-		if (!data.input.size && ft_dup(last_read, data.in_out_fd[1]) == -1)
-			return (-1);
-		else if (data.input.size && ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
-			return (-1);
-	}
-	return (0);
+    if (fds != NULL)
+    {
+        if (!data.input.size && !data.output.size && \
+            ft_dup(last_read, fds[1]) == -1)
+            return (-1);
+        else if (data.input.size && !data.output.size && \
+            ft_dup(data.in_out_fd[0], fds[1]) == -1)
+            return (-1);
+        else if (!data.input.size && data.output.size && \
+            ft_dup(last_read, data.in_out_fd[1]) == -1)
+            return (-1);
+    }
+    else
+    {
+        if (!data.input.size)
+        {
+            if (ft_dup(last_read, data.in_out_fd[1]) == -1)
+                return (-1);
+        }
+        else if (data.input.size && \
+            ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
+            return (-1);
+    }
+    return (0);
 }
 
-int	exec_redirection(t_data data, int *fds, int last_read)
+int exec_redirection(t_data data, int *fds, int last_read)
 {
-	if (data.input.size && data.output.size)
-	{
-		if (ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
-			return (-1);
-	}
-	if (!last_read && fds)
-	{
-		if (!data.output.size)
-		{
-			if (ft_dup(data.in_out_fd[0], fds[1]) == -1)
-				return (-1);
-		}
-		else
-		{
-			if (ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
-				return (-1);
-		}
-	}
-	return (fork_redir(data, fds, last_read));
+    if (data.input.size && data.output.size)
+    {
+        if (ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
+            return (-1);
+    }
+    else if (!last_read && fds)
+    {
+        if (!data.output.size)
+        {
+            if (ft_dup(data.in_out_fd[0], fds[1]) == -1)
+                return (-1);
+        }
+        else
+        {
+            if (ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
+                return (-1);
+        }
+    }
+    return (fork_redir(data, fds, last_read));
 }
 
-int	manage_redirection(t_data *data, int tab_size, int i, int **fd)
+int manage_redirection(t_data *data, int tab_size, int i, int **fd)
 {
-	int	ret_value;
+    int ret_value;
 
-	if (i < tab_size - 1 && fd)
-	{
-		if (i)
-			ret_value = exec_redirection(data[i], fd[i], fd[i - 1][0]);
-		else
-			ret_value = exec_redirection(data[i], fd[i], 0);
-	}
-	else if (fd)
-		ret_value = exec_redirection(data[i], NULL, fd[i - 1][0]);
-	else
-		ret_value = exec_redirection(data[i], NULL, 0);
-	return (ret_value);
+    if (tab_size == 1)
+    {
+        if (data->input.size || data->output.size)
+            return (ft_dup(data->in_out_fd[0], data->in_out_fd[1]));
+        return (0);
+    }
+
+    if (i < tab_size - 1 && fd)
+    {
+        if (i != 0)
+            ret_value = exec_redirection(data[i], fd[i], fd[i - 1][0]);
+        else
+            ret_value = exec_redirection(data[i], fd[i], 0);
+    }
+    else if (fd)
+        ret_value = exec_redirection(data[i], NULL, fd[i - 1][0]);
+    else
+        ret_value = exec_redirection(data[i], NULL, 0);
+    return (ret_value);
 }

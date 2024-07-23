@@ -3,18 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/18 12:33:30 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/23 10:53:25 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // ###### INCLUDES ######
 
-#include "includes.h"
+#include <struct.h>
+#include <libft.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <signal.h>
+#include "exec.h"
 
 // ###### INCLUDES ######
+
+
+
 // ###### PROTO ######
 
 int		ft_perror(char *err_message);
@@ -23,8 +31,9 @@ int		parse_prompt(char **envp, t_data **data);
 void	free_struct(t_data *struc, int tab_size);
 void	free_tab(t_table *tab, int start);
 int		exec(int tab_size, t_data *data);
-int		ft_getenv(char *word, char **env, char **var_content);
-t_table	ft_tabdup(char **envp);
+int     ft_getenv(char *word, char **env, char **var_content);
+t_table ft_tabdup(char **envp);
+
 
 // ###### PROTO ######
 
@@ -36,24 +45,21 @@ t_table	ft_tabdup(char **envp);
 // function only for tests
 void	print_tab(t_table tab)
 {
-	int	i;
+	int	i = 0;
 
-	i = 0;
-	while (i < tab.size)
+	while(i < tab.size)
 		printf("%s\n", tab.tab[i++]);
 }
 
 // function only for tests
 void	print_struct(t_data *data, int tab_size)
 {
-	int	i;
-	int	y;
+	int	i = 0;
+	int	y = 0;
 
-	i = 0;
-	y = 0;
 	while (i < tab_size)
 	{
-		printf("\nSTRUC %d\n\n", i + 1);
+		printf("\nSTRUC %d\n\n", i+1);
 		printf("cmd  = %s\n", data[i].cmd_path);
 		y = 0;
 		if (data[i].args.tab)
@@ -84,9 +90,9 @@ void	print_struct(t_data *data, int tab_size)
 static t_data	*reset_env(t_data *data, int tab_size)
 {
 	t_table	tmp;
-	int		last_exit;
+    int     last_exit;
 
-	last_exit = data[0].exit_status;
+    last_exit = data[0].exit_status;
 	tmp = ft_tabdup(data[0].env.tab);
 	if (!tmp.tab)
 	{
@@ -99,7 +105,7 @@ static t_data	*reset_env(t_data *data, int tab_size)
 		return (free_tab(&tmp, 0), ft_perror("error -> reset env\n"), NULL);
 	data[0].env.tab = tmp.tab;
 	data[0].env.size = tmp.size;
-	data[0].exit_status = last_exit;
+    data[0].exit_status = last_exit;
 	return (data);
 }
 
@@ -110,15 +116,15 @@ static t_data	*init_data(char **envp)
 	data = ft_calloc(1, sizeof(t_data));
 	if (!data)
 		return (ft_perror("error -> init structure\n"), NULL);
-	if (init_sighandler(data) == -1)
-		return (NULL);
+    if (init_sighandler(data) == -1)
+        return (NULL);
 	data->env = ft_tabdup(envp);
 	if (!data->env.tab)
 		return (free(data), ft_perror("error -> init structure\n"), NULL);
 	return (data);
 }
 
-int	main(int argc, char **argv, char **envp)
+int main (int argc, char **argv, char **envp)
 {
 	t_data	*data;
 
@@ -129,16 +135,16 @@ int	main(int argc, char **argv, char **envp)
 		return (2);
 	while (1)
 	{
-		data->prompt = readline("\033[32mmini$hell>\033[0m ");
-		if (!data->prompt)
-			return (free_struct(data, 1), exit(EXIT_SUCCESS), 0);
+		data->prompt = readline("mini$hell> ");
+        if (!data->prompt)
+            return (free_struct(data, 1), exit(EXIT_SUCCESS), 0);
 		add_history(data->prompt);
 		data->tab_size = parse_prompt(data->env.tab, &data);
 		if (data->tab_size == -1)
 			return (free_struct(data, 1), 4);
 		if (data->tab_size > 0)
-			if (exec(data->tab_size, data) == -1)
-				return (free_struct(data, 1), 5);
+            if (exec(data->tab_size, data) == -1)
+			    return (free_struct(data, 1), 5);
 		data = reset_env(data, data->tab_size);
 		if (!data)
 			return (5);
