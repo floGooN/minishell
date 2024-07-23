@@ -6,7 +6,7 @@
 #    By: florian <florian@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/03 11:07:17 by fberthou          #+#    #+#              #
-#    Updated: 2024/07/23 17:59:59 by florian          ###   ########.fr        #
+#    Updated: 2024/07/23 19:51:06 by florian          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,8 +65,7 @@ SRC		=	$(MAIN_PATH)/main.c $(MAIN_PATH)/utils.c $(MAIN_PATH)/sig_manager.c\
 			$(PARSING_PATH)/struct_filling.c \
 			\
 			$(EXEC_PATH)/exec.c $(EXEC_PATH)/exec_utils.c \
-			$(EXEC_PATH)/child_routine.c \
-			$(EXEC_PATH)/pipe.c	$(EXEC_PATH)/fds_management.c\
+			$(EXEC_PATH)/child_routine.c $(EXEC_PATH)/pipe.c \
 			$(EXEC_PATH)/exec_one.c $(EXEC_PATH)/exec_one_utils.c \
 			\
 			$(INIT_EXEC_PATH)/init_exec.c $(INIT_EXEC_PATH)/heredoc.c $(INIT_EXEC_PATH)/build_exec_path.c \

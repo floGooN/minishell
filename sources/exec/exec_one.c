@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:04:55 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/23 13:30:40 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/23 20:03:06 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-int	exec_child(t_data *data, int saved_std[])
+static int  exec_child(t_data *data, int saved_std[])
 {
 	pid_t	pid;
 
@@ -36,20 +36,18 @@ int	exec_child(t_data *data, int saved_std[])
 	return (0);
 }
 
-int	exec_built(t_data *data, int saved_std[])
+static int  exec_built(t_data *data, int saved_std[])
 {
+    int exit_stat;
+
 	if (save_std_fileno(data, saved_std))
 		return (1);
 	if (redir_file(data))
 		return (1);
-	if (exec_builtin(data, 1, 0, NULL))
-	{
-		reset_std_fileno(data, saved_std);
-		return (close_all_redir(data, saved_std), 1);
-	}
+	exit_stat = exec_builtin(data, 1, 0, NULL);
 	if (reset_std_fileno(data, saved_std))
 		return (close_all_redir(data, saved_std), 1);
-	return (close_all_redir(data, saved_std));
+	return (close_all_redir(data, saved_std), exit_stat);
 }
 
 int	exec_one(t_data *data)

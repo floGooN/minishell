@@ -6,15 +6,69 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 15:21:37 by florian           #+#    #+#             */
-/*   Updated: 2024/07/23 18:26:50 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/23 19:51:43 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
 void    exec_builtin_child(t_data *data, int i, int **fd, int last_read);
-int     manage_redirection(t_data *data, int i, int **fd, int last_read);
 int     close_in_out_files(t_data *data);
+
+int  ft_dup(int read_fd, int write_fd)
+{
+  if (read_fd > STDIN_FILENO)
+  {
+    if (dup2(read_fd, STDIN_FILENO) == -1)
+    {
+      if (write_fd > STDOUT_FILENO)
+        close(write_fd);
+      return (close(read_fd), perror("dup read_fd "), -1);
+    }
+  }
+  if (write_fd > STDOUT_FILENO)
+  {
+    if (dup2(write_fd, STDOUT_FILENO) == -1)
+    {
+      if (read_fd > STDIN_FILENO)
+        close(read_fd);
+      return (close(write_fd), perror("dup write_fd "), -1);
+    }
+  }
+  return(0);
+}
+
+int manage_redirection(t_data *data, int i, int **fd, int last_read)
+{
+    int ret_value;
+
+    if (i == 0)
+    {
+        if (data[i].output.size > 0)
+            ft_dup(data[i].in_out_fd[0], data[i].in_out_fd[1]);
+        else
+            ft_dup(data[i].in_out_fd[0], fd[i][1]);
+    }
+    else if (i < data[i].tab_size - 1)
+    {
+        if (data[i].input.size > 0 && data[i].output.size > 0)
+            ft_dup(data[i].in_out_fd[0], data[i].in_out_fd[1]);
+        else if (data[i].input.size > 0)
+            ft_dup(data[i].in_out_fd[0], fd[i][1]);
+        else if (data[i].output.size > 0)
+            ft_dup(last_read, data[i].in_out_fd[1]);
+        else
+            ft_dup(last_read, fd[i][1]);
+    }
+    else
+    {
+        if (data[i].input.size > 0)
+            ft_dup(data[i].in_out_fd[0], data[i].in_out_fd[1]);
+        else
+            ft_dup(last_read, data[i].in_out_fd[1]);
+    }
+    return (0);
+}
 
 int child_routine(t_data *data, int i, int **fd, int last_read)
 {

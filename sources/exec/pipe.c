@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 10:42:26 by florian           #+#    #+#             */
-/*   Updated: 2024/07/23 19:02:45 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/23 19:47:40 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ int	close_pipes(int **fds, int size, int i_start, int last_fd)
       if (fds[i_start][1] > STDOUT_FILENO)
         if (close(fds[i_start][1]) == -1)
           status = -1;
-    //   fds[i_start][0] = -1;
-    //   fds[i_start][1] = -1;
       i_start++;
     }
     if (status == -1)
