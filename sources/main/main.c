@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/23 16:28:33 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/24 15:37:41 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <signal.h>
-#include "exec.h"
 
 // ###### INCLUDES ######
-
-
 
 // ###### PROTO ######
 
@@ -33,6 +30,7 @@ void	free_tab(t_table *tab, int start);
 int		exec(int tab_size, t_data *data);
 int     ft_getenv(char *word, char **env, char **var_content);
 t_table ft_tabdup(char **envp);
+t_data  *give_data(t_data *data);
 
 
 // ###### PROTO ######
@@ -106,6 +104,7 @@ static t_data	*reset_env(t_data *data, int tab_size)
 	data[0].env.tab = tmp.tab;
 	data[0].env.size = tmp.size;
     data[0].exit_status = last_exit;
+    give_data(data);
 	return (data);
 }
 

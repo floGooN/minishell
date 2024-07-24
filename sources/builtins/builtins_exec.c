@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:39:26 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/24 12:14:19 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:09:27 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ int	exec_builtin(t_data *data, int tab_size, int i, int **fd)
 		if (!export.tab)
 			init_exported_env(data, &export);
         if (data[i].args.tab[1] == NULL)
-            data[0].exit_status = ft_export_print(&export); // (data[0].env)
+            data[0].exit_status = ft_export_print(&export);
         else
-            data[0].exit_status = ft_export(data, &export); // export : (data, i tab_size);
+            data[0].exit_status = ft_export(data, &export);
     }
     else if (ft_strcmp(data[i].args.tab[0], "unset") == 0)
         data[0].exit_status = ft_unset(data);
