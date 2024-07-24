@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:39:26 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/23 18:01:41 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/24 12:14:19 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,11 @@
 
 int	exec_builtin(t_data *data, int tab_size, int i, int **fd)
 {
-	int	status;
-
-	status = 0;
-	if (ft_strcmp(data->args.tab[0], "pwd") == 0)
+	if (ft_strcmp(data[i].args.tab[0], "pwd") == 0)
 		data[0].exit_status = ft_pwd();
-	else if (ft_strcmp(data->args.tab[0], "echo") == 0)
-		data[0].exit_status = ft_echo(data);
-	else if (ft_strcmp(data->args.tab[0], "env") == 0)
+	else if (ft_strcmp(data[i].args.tab[0], "echo") == 0)
+		data[0].exit_status = ft_echo(&data[i]);
+    else if (ft_strcmp(data[i].args.tab[0], "env") == 0)
 		data[0].exit_status = ft_env(data);
     else if (ft_strcmp(data[i].args.tab[0], "cd") == 0)
         data[0].exit_status = ft_cd(data);
