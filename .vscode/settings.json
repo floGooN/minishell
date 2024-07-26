@@ -62,5 +62,5 @@
     "tokenizer.h": "c",
     "parsing.h": "c",
     "includes.h": "c"
-}
+  }
 }

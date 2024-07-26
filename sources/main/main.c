@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/24 15:37:41 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/26 14:11:39 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		init_sighandler(t_data *data);
 int		parse_prompt(char **envp, t_data **data);
 void	free_struct(t_data *struc, int tab_size);
 void	free_tab(t_table *tab, int start);
-int		exec(int tab_size, t_data *data);
+void	exec(int tab_size, t_data *data);
 int     ft_getenv(char *word, char **env, char **var_content);
 t_table ft_tabdup(char **envp);
 t_data  *give_data(t_data *data);
@@ -140,14 +140,11 @@ int main (int argc, char **argv, char **envp)
             return (free_struct(data, 1), exit(EXIT_SUCCESS), 0);
 		add_history(data->prompt);
 		tab_size = parse_prompt(data->env.tab, &data);
-		if (tab_size == -1)
-			return (free_struct(data, 1), 4);
 		if (tab_size > 0)
-            if (exec(tab_size, data) == -1)
-			    return (free_struct(data, 1), 5);
+            exec(tab_size, data);
 		data = reset_env(data, tab_size);
 		if (!data)
-			return (5);
+			return (4);
 	}
 	return (0);
 }
