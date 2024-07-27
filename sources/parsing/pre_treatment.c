@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:51:51 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/26 13:28:53 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/27 12:08:35 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ static char	*quote_treatment(char *prompt, int *i_prompt, char c)
 	tmp = init_treatment(prompt, &i_tmp, *i_prompt);
 	if (!tmp)
 		return (NULL);
-	tmp[i_tmp++] = 32;
+	tmp[i_tmp] = 32;
+    i_tmp++;
 	tmp[i_tmp] = prompt[(*i_prompt)];
 	i_tmp++;
 	while (prompt[++(*i_prompt)])
 	{
-		if (prompt[*i_prompt] == c && \
-			(prompt[(*i_prompt) + 1] == 9 || prompt[(*i_prompt) + 1] == 32))
+		if (prompt[*i_prompt] == c && prompt[(*i_prompt) + 1] <= 39)
 			break ;
 		tmp[i_tmp++] = prompt[*i_prompt];
 	}
@@ -97,7 +97,7 @@ static char *check_condition(char *prompt, int *i)
     }
     else if (prompt[*i] == '"' || prompt[*i] == '\'')
     {
-        if (*i == 0 || (prompt[*i - 1] == 9 || prompt[*i - 1] == 32))
+        if (*i == 0 || prompt[*i - 1] != 32 || prompt[*i - 1] != 9)
             prompt = quote_treatment(prompt, i, prompt[*i]);
         else
             (*i)++;

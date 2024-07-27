@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 13:15:17 by florian           #+#    #+#             */
-/*   Updated: 2024/07/26 13:52:16 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/27 12:20:28 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int  init_structure(t_data *data)
       return (status);
   }
   status = token_cleaner(data);
-  if (status == -1 || status == 1)
+  if (status)
     return (status);
   return (0);
 }
@@ -94,5 +94,6 @@ int init_exec(t_data *data, int tab_size)
         }
         i++;
 	}
+    print_struct(data, tab_size);
 	return (0);
 }

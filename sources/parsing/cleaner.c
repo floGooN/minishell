@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleaner.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 14:26:45 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/09 11:06:01 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/27 12:43:56 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,15 @@ void	free_tab(t_table *tab, int start);
 // parsing/quote_management.c
 int		quote_management(t_table args, t_table tmp);
 
+// parsing/parsing_utils.c
+int     include_char(char *token, char c, int start);
+
 // ####### PROTOTYPES ######## //
 
 static int	clean_token(t_table args, t_table tmp)
 {
-	if (args.tab[tmp.size][0] == '\'' || args.tab[tmp.size][0] == '"')
+	if (include_char(args.tab[tmp.size], '\'', 0)  >= 0 || \
+        include_char(args.tab[tmp.size], '\"', 0)  >= 0)
 		return (quote_management(args, tmp));
 	else
 	{
@@ -49,10 +53,10 @@ int	token_cleaner(t_data *data)
 	while (tmp.size < data->args.size)
 	{
 		ret_value = clean_token(data->args, tmp);
-		if (ret_value == -1)
-			return (free_tab(&tmp, 0), -1);
-		if (ret_value == 1)
+		if (ret_value == -1 || ret_value == 1)
 			return (free_tab(&tmp, 0), 1);
+        if (!data->args.tab[tmp.size][0])
+            ; // pointeur vide
 		(tmp.size)++;
 	}
 	free_tab(&(data->args), 0);

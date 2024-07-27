@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote_management.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 15:07:06 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/17 13:08:59 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/27 12:42:24 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ static int	double_quote(char *token, t_table tmp)
 		return (ft_perror("error-> alloc db quotes\n"), -1);
 	return (0);
 }
-
 static int	simple_quote(char *token, t_table tmp)
 {
 	if (quoting_count(token, '\''))

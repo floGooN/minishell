@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 10:56:02 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/26 14:05:58 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/26 15:27:05 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	free_struct(t_data *struc, int tab_size)
 	{
 		if (struc[i].cmd_path)
 		{
-            printf("ici\n");
 			free(struc[i].cmd_path);
 			if (struc[i].prompt)
                 free(struc[i].prompt);

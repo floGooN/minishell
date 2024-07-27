@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/26 14:11:39 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/27 12:20:42 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <struct.h>
 #include <libft.h>
+#include <get_next_line.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <signal.h>
@@ -135,13 +136,33 @@ int main (int argc, char **argv, char **envp)
 		return (2);
 	while (1)
 	{
+        // if (isatty(fileno(stdin)))
+        //     data->prompt = readline("mmini$hell> ");
+        // else
+        // {
+        //     char *line;
+        //     line = get_next_line(fileno(stdin));
+        //     if (!line)
+        //         ;
+        //     else
+        //     {
+        //         data->prompt = ft_strtrim(line, "\n");
+
+        //         free(line);
+        //     }
+        // }
 		data->prompt = readline("\033[32mmini$hell>\033[0m ");
         if (!data->prompt)
             return (free_struct(data, 1), exit(EXIT_SUCCESS), 0);
-		add_history(data->prompt);
-		tab_size = parse_prompt(data->env.tab, &data);
+        if (data->prompt[0])
+		    tab_size = parse_prompt(data->env.tab, &data);
+		else
+            tab_size = 0;
+        // add_history(data->prompt);
 		if (tab_size > 0)
             exec(tab_size, data);
+        else
+            data[0].exit_status = tab_size;
 		data = reset_env(data, tab_size);
 		if (!data)
 			return (4);

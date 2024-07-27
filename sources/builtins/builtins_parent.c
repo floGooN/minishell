@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 08:27:25 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/23 18:17:41 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/26 15:28:16 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int ft_cd(t_data *data)
 	{
         if (ft_getenv("OLDPWD", data->env.tab, &new_dir) != 0)
             return (ft_putstr_fd("cd: OLDPWD not set\\n", 2), -1);
-        ft_printf("%s\\n", new_dir);
+        // ft_printf("%s\\n", new_dir);
     }
 	else
         new_dir = data->args.tab[1];
@@ -78,7 +78,6 @@ void	ft_exit(t_data *data, int tab_size, int last_status)
 {
 	int	status;
 
-	printf("My exit\n");
 	status = 0;
 	if (data->args.tab[1])
 	{
@@ -93,14 +92,10 @@ void	ft_exit(t_data *data, int tab_size, int last_status)
 			status = status % 256;
 			if (status < 0)
 				status += 256;
-			printf("Status in ft_exit = %d\n", status);
 		}
 	}
 	else
-	{
-		printf("Status in ft_exit no agrs = %d\n", status);
 		status = last_status;
-	}
 	free_struct(data, tab_size);
 	exit(status);
 }

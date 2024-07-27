@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 07:33:24 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/26 13:44:47 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/27 12:09:30 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	parse_prompt(char **env, t_data **data)
 	if (!(*data)[0].prompt)
 		return (1);
 	(*data)[0].prompt = pre_treatment((*data)[0].prompt, 0);
+    // printf("%s\n", (*data)[0].prompt);
 	if (!(*data)->prompt)
 		return (-1);
 	tokens = tokenizer((*data)->prompt);

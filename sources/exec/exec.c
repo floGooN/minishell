@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/26 14:11:17 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/26 15:15:51 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,12 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
 void exec(int tab_size, t_data *data)
 {
     int **pipe_fd;
+    int exit_status;
     int i;
 
     i = 0;
-    if (init_exec(data, tab_size))
+    exit_status = init_exec(data, tab_size);
+    if (exit_status)
     {
         while (i < tab_size)
         {
@@ -104,12 +106,14 @@ void exec(int tab_size, t_data *data)
         }
     }
     else if (tab_size == 1)
-        exec_one(&data[0]);
+        exit_status = exec_one(&data[0]);
     else
     {
         pipe_fd = init_pipe(data, tab_size - 1);
         if (!pipe_fd)
             return ;
-        exec_all(data, tab_size, pipe_fd);
+        exit_status = exec_all(data, tab_size, pipe_fd);
     }
+    if (exit_status)
+        data[0].exit_status = exit_status;
 }
