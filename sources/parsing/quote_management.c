@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 15:07:06 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/27 12:42:24 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/27 14:30:22 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,17 @@ static int	simple_quote(char *token, t_table tmp)
 	return (0);
 }
 
-int	quote_management(t_table args, t_table tmp)
+int	quote_management(t_table args, t_table tmp, int y)
 {
 	int	i;
 
 	i = 0;
-	while (args.tab[tmp.size][i])
+	while (args.tab[y][i])
 	{
-		if (args.tab[tmp.size][i] == '\'')
-			return (simple_quote(args.tab[tmp.size], tmp));
-		else if (args.tab[tmp.size][i] == '"')
-			return (double_quote(args.tab[tmp.size], tmp));
+		if (args.tab[y][i] == '\'')
+			return (simple_quote(args.tab[y], tmp));
+		else if (args.tab[y][i] == '"')
+			return (double_quote(args.tab[y], tmp));
 		i++;
 	}
 	return (0);
