@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:04:48 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/27 12:28:17 by florian          ###   ########.fr       */
+/*   Updated: 2024/08/01 19:28:28 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,19 +77,48 @@ char	*final_build(char *token, char c)
 	return (final);
 }
 
+int	check_quote(char *prompt, int *i)
+{
+	int	flag;
+
+	flag = 0;
+	while (prompt[*i])
+	{
+		if (prompt[*i] == '\'' && flag == 0)
+			flag = 1;
+		else if (prompt[*i] == '\'' && flag == 1)
+		{
+			(*i)++;
+			break ;
+		}
+		else if (prompt[*i] == '\"' && flag == 0)
+			flag = -1;
+		else if (prompt[*i] == '\"' && flag == -1)
+		{
+			(*i)++;
+			break ;
+		}
+		else if ((prompt[*i] == 32 || prompt[*i] == 9) && !flag)
+			break ;
+		(*i)++;
+	}
+	return (flag);
+}
+
 int	find_end(char *prompt, char c, int *i)
 {
+	int	flag;
+
+	flag = check_quote(prompt, i);
+	if (flag == 1)
+		c = '\'';
+	else if (flag == -1)
+		c = '\"';
 	if (c == '<' || c == '>' || c == '$')
 	{
 		while (prompt[*i] && prompt[*i] != 32 && prompt[*i] != 9)
 			(*i)++;
 		return (*i);
-	}
-	while (prompt[++(*i)])
-	{
-		if (prompt[*i] == c || prompt[*i] == '<' || \
-			prompt[*i] == '>' || prompt[*i] == '|')
-			return (*i);
 	}
 	return (*i);
 }

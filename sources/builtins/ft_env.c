@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/17 10:19:42 by fberthou          #+#    #+#             */
-/*   Updated: 2024/08/01 07:02:02 by jedusser         ###   ########.fr       */
+/*   Created: 2024/07/31 15:17:24 by jedusser          #+#    #+#             */
+/*   Updated: 2024/07/31 15:37:52 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../hdr/libft.h"
+#include "exec.h"
 
-ssize_t	ft_putstr_fd(char *s, int fd)
+int	ft_env(t_data *data)
 {
-	size_t	count;
+	int	i;
 
-	count = ft_strlen(s);
-	if (fd)
-		return (write(fd, s, count));
+	i = 0;
+	if (data->args.size > 1)
+		return (127);
+	while (data->env.tab[i])
+	{
+		ft_printf("%s\n", data->env.tab[i]);
+		i++;
+	}
 	return (0);
 }

@@ -3,70 +3,89 @@
 /*                                                        :::      ::::::::   */
 /*   quote_management.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 15:07:06 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/27 14:30:22 by florian          ###   ########.fr       */
+/*   Updated: 2024/08/01 20:46:06 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
+#include "libft.h"
 #include "struct.h"
+#include <stdbool.h>
 
 // main/utils.c
-int		ft_perror(char *err_message);
+int			ft_perror(char *err_message);
 // parsing/parsing_utils.c
-char	*final_build(char *token, char c);
+char		*final_build(char *token, char c);
 
-static bool	quoting_count(char *token, char c)
+char	*init_new_str(char *token, int nb_char)
 {
-	int	i;
-	int	count;
+	if (nb_char % 2)
+		return (ft_perror("error -> syntax\n"), NULL);
+	if (!nb_char)
+		return (ft_strdup(token));
+	return (ft_calloc(ft_strlen(token) + 1, sizeof(char)));
+}
 
-	i = 0;
-	count = 0;
-	while (token[i])
+int	capture_the_flag(char *token, int *i, int *flag)
+{
+	if (token[*i] == '\"' && *flag == 0)
 	{
-		if (token[i] == c)
-			count++;
-		i++;
-	}
-	if (count % 2)
+		*flag = -1;
+		(*i)++;
 		return (1);
+	}
+	else if (token[*i] == '\"' && *flag == -1)
+	{
+		*flag = 0;
+		(*i)++;
+		return (capture_the_flag(token, i, flag));
+	}
+	else if (token[*i] == '\'' && *flag == 0)
+	{
+		*flag = 1;
+		(*i)++;
+		return (1);
+	}
+	else if (token[*i] == '\'' && *flag == 1)
+	{
+		*flag = 0;
+		(*i)++;
+		return (capture_the_flag(token, i, flag));
+	}
 	return (0);
 }
 
-static int	double_quote(char *token, t_table tmp)
+int	delete_char(char *token, t_table *tmp)
 {
-	if (quoting_count(token, '"'))
-		return (ft_perror("error -> syntax\n"), 1);
-	tmp.tab[tmp.size] = final_build(token, '"');
-	if (!tmp.tab[tmp.size])
-		return (ft_perror("error-> alloc db quotes\n"), -1);
-	return (0);
-}
-static int	simple_quote(char *token, t_table tmp)
-{
-	if (quoting_count(token, '\''))
-		return (ft_perror("error -> syntax\n"), 1);
-	tmp.tab[tmp.size] = final_build(token, '\'');
-	if (!tmp.tab[tmp.size])
-		return (ft_perror("error-> alloc simple quotes\n"), -1);
-	return (0);
-}
-
-int	quote_management(t_table args, t_table tmp, int y)
-{
+	int	flag;
+	int	y;
 	int	i;
 
 	i = 0;
-	while (args.tab[y][i])
+	y = -1;
+	flag = 0;
+	while (i < (int)ft_strlen(token) && token[i])
 	{
-		if (args.tab[y][i] == '\'')
-			return (simple_quote(args.tab[y], tmp));
-		else if (args.tab[y][i] == '"')
-			return (double_quote(args.tab[y], tmp));
-		i++;
+		capture_the_flag(token, &i, &flag);
+		if (flag == -1 && token[i] != '\"')
+			tmp->tab[tmp->size][++y] = token[i++];
+		if (flag == 1 && token[i] != '\'')
+			tmp->tab[tmp->size][++y] = token[i++];
+		if (flag == 0)
+			tmp->tab[tmp->size][++y] = token[i++];
+		capture_the_flag(token, &i, &flag);
 	}
+	if (flag != 0)
+		return (ft_perror("error -> unexpected token\n"), -1);
 	return (0);
+}
+
+int	quote_management(t_table args, t_table *tmp)
+{
+	tmp->tab[tmp->size] = ft_calloc(ft_strlen(args.tab[tmp->size]) + 1, 1);
+	if (!tmp->tab[tmp->size])
+		return (ft_perror("alloc -> quote_management"), -1);
+	return (delete_char(args.tab[tmp->size], tmp));
 }

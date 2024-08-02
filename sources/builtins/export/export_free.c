@@ -1,23 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   export_free.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/17 10:19:42 by fberthou          #+#    #+#             */
-/*   Updated: 2024/08/01 07:02:02 by jedusser         ###   ########.fr       */
+/*   Created: 2024/07/31 15:21:46 by jedusser          #+#    #+#             */
+/*   Updated: 2024/08/01 07:40:32 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../hdr/libft.h"
+#include "exec.h"
 
-ssize_t	ft_putstr_fd(char *s, int fd)
+void	free_vars(t_vars *vars)
 {
-	size_t	count;
-
-	count = ft_strlen(s);
-	if (fd)
-		return (write(fd, s, count));
-	return (0);
+	if (vars->equal_pos)
+	{
+		if (!vars->key)
+			free(vars->equal_pos);
+		vars->equal_pos = NULL;
+	}
+	if (vars->key)
+	{
+		free(vars->key);
+		vars->key = NULL;
+	}
+	if (vars->new_var)
+	{
+		free(vars->new_var);
+		vars->new_var = NULL;
+	}
+	if (vars->value)
+	{
+		free(vars->value);
+		vars->value = NULL;
+	}
 }

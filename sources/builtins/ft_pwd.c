@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/17 10:19:42 by fberthou          #+#    #+#             */
-/*   Updated: 2024/08/01 07:02:02 by jedusser         ###   ########.fr       */
+/*   Created: 2024/07/09 08:28:16 by jedusser          #+#    #+#             */
+/*   Updated: 2024/08/01 06:51:22 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../hdr/libft.h"
+#include "exec.h"
 
-ssize_t	ft_putstr_fd(char *s, int fd)
+int	ft_pwd(void)
 {
-	size_t	count;
+	char	cwd[1024];
+	char	*temp;
 
-	count = ft_strlen(s);
-	if (fd)
-		return (write(fd, s, count));
-	return (0);
+	temp = getcwd(cwd, sizeof(cwd));
+	if (temp != NULL)
+	{
+		ft_printf("%s\n", cwd);
+		return (0);
+	}
+	else
+		return (perror("pwd "), 1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 07:33:24 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/27 12:09:30 by florian          ###   ########.fr       */
+/*   Updated: 2024/08/01 20:44:40 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,14 @@ void	print_struct(t_data *data, int tab_size);
 			-> input files
 			-> output files
 */
-int	parse_prompt(char **env, t_data **data)
+int	parse_prompt(t_data **data)
 {
 	t_table	tokens;
 	int		struc_tab_size;
-	int		ret_value;
 
 	if (!(*data)[0].prompt)
 		return (1);
 	(*data)[0].prompt = pre_treatment((*data)[0].prompt, 0);
-    // printf("%s\n", (*data)[0].prompt);
 	if (!(*data)->prompt)
 		return (-1);
 	tokens = tokenizer((*data)->prompt);

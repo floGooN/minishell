@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:04:55 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/23 20:03:06 by florian          ###   ########.fr       */
+/*   Updated: 2024/08/01 20:54:13 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-static int  exec_child(t_data *data, int saved_std[])
+static int	exec_child(t_data *data, int saved_std[])
 {
 	pid_t	pid;
 
@@ -24,7 +24,10 @@ static int  exec_child(t_data *data, int saved_std[])
 		if (redir_file(data))
 			exit(EXIT_FAILURE);
 		if (execve(data->cmd_path, data->args.tab, data->env.tab) == -1)
-			exit(EXIT_FAILURE);
+		{
+			free_struct(data, 1);
+			exit(1);
+		}
 	}
 	else
 	{
@@ -36,23 +39,23 @@ static int  exec_child(t_data *data, int saved_std[])
 	return (0);
 }
 
-static int  exec_built(t_data *data, int saved_std[])
+static int	exec_built(t_data *data, int saved_std[])
 {
-    int exit_stat;
+	int	exit_stat;
 
 	if (save_std_fileno(data, saved_std))
 		return (1);
 	if (redir_file(data))
 		return (1);
-	exit_stat = exec_builtin(data, 1, 0, NULL);
-	if (reset_std_fileno(data, saved_std))
+	exit_stat = exec_builtin(data, 0, NULL, 0);
+	if (reset_std_fileno(saved_std))
 		return (close_all_redir(data, saved_std), 1);
 	return (close_all_redir(data, saved_std), exit_stat);
 }
 
 int	exec_one(t_data *data)
 {
-	int		saved_std[2];
+	int	saved_std[2];
 
 	saved_std[0] = STDIN_FILENO;
 	saved_std[1] = STDOUT_FILENO;

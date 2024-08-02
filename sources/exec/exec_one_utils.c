@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_one_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:00:03 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/23 13:07:14 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/08/01 20:47:42 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	redir_file(t_data *data)
 	return (0);
 }
 
-int	reset_std_fileno(t_data *data, int saved_fd[])
+int	reset_std_fileno(int saved_fd[])
 {
 	if (saved_fd[0] > STDIN_FILENO)
 	{

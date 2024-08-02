@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: florian <florian@student.42.fr>            +#+  +:+       +#+         #
+#    By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/03 11:07:17 by fberthou          #+#    #+#              #
-#    Updated: 2024/07/27 11:38:50 by florian          ###   ########.fr        #
+#    Updated: 2024/08/01 20:42:00 by jedusser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,9 @@ EXEC_PATH				= $(SRC_PATH)/exec
 SIG_PATH				= $(SRC_PATH)/signals
 
 BUILTINS_PATH			= $(SRC_PATH)/builtins
-
 EXPORT_PATH				= $(BUILTINS_PATH)/export
+CD_PATH					= $(BUILTINS_PATH)/cd
+EXIT_PATH				= $(BUILTINS_PATH)/exit
 
 INIT_EXEC_PATH			= $(EXEC_PATH)/init_exec
 
@@ -45,16 +46,15 @@ BUILD_PARS_PATH			= $(BUILD_PATH)/parsing
 BUILD_EXEC_PATH			= $(BUILD_PATH)/exec
 BUILD_SIG_PATH			= $(BUILD_PATH)/signals
 BUILD_BUILTINS_PATH		= $(BUILD_PATH)/builtins
-
 BUILD_EXPORT_PATH		= $(BUILD_BUILTINS_PATH)/export
-
 BUILD_INIT_EXEC_PATH	= $(BUILD_EXEC_PATH)/init_exec
 
 # --- COMPILATION FLAGS --- #
 LIB_FLAGS	=	-I$(LIBFT_HDR_PATH)
-COMPFLAGS	=	-I$(HDR_PATH) $(LIB_FLAGS) -g3 # -Wall -Wextra -Werror
+COMPFLAGS	=	-I$(HDR_PATH) $(LIB_FLAGS)  -g3 -Wall -Wextra -Werror
 
-SRC		=	$(MAIN_PATH)/main.c $(MAIN_PATH)/utils.c $(MAIN_PATH)/sig_manager.c\
+SRC		=	$(MAIN_PATH)/main.c $(MAIN_PATH)/utils.c $(MAIN_PATH)/sig_manager.c \
+			$(MAIN_PATH)/init_mini_env.c \
 			\
 			$(PARSING_PATH)/parsing.c $(PARSING_PATH)/parsing_utils.c \
 			$(PARSING_PATH)/pre_treatment.c $(PARSING_PATH)/pre_treatment_utils.c \
@@ -67,15 +67,18 @@ SRC		=	$(MAIN_PATH)/main.c $(MAIN_PATH)/utils.c $(MAIN_PATH)/sig_manager.c\
 			$(EXEC_PATH)/exec.c $(EXEC_PATH)/exec_utils.c \
 			$(EXEC_PATH)/child_routine.c $(EXEC_PATH)/pipe.c \
 			$(EXEC_PATH)/exec_one.c $(EXEC_PATH)/exec_one_utils.c \
+			$(EXEC_PATH)/close_fds.c \
 			\
 			$(INIT_EXEC_PATH)/init_exec.c $(INIT_EXEC_PATH)/heredoc.c $(INIT_EXEC_PATH)/build_exec_path.c \
 			$(INIT_EXEC_PATH)/redirections.c $(INIT_EXEC_PATH)/redirections_utils.c \
 			\
-			$(BUILTINS_PATH)/builtins_parent.c $(BUILTINS_PATH)/builtins_child.c $(BUILTINS_PATH)/builtins_utils.c \
-			$(BUILTINS_PATH)/builtins_exec.c \
-			$(BUILTINS_PATH)/exec_builtin_child.c \
+			$(BUILTINS_PATH)/builtins_utils.c $(BUILTINS_PATH)/builtins_exec.c $(BUILTINS_PATH)/exec_builtin_child.c \
+			$(BUILTINS_PATH)/ft_cd.c $(BUILTINS_PATH)/ft_echo.c $(BUILTINS_PATH)/ft_env.c \
+			$(BUILTINS_PATH)/ft_exit.c $(BUILTINS_PATH)/ft_pwd.c $(BUILTINS_PATH)/ft_unset.c \
 			\
-			$(EXPORT_PATH)/export_utils.c $(EXPORT_PATH)/export_update.c $(EXPORT_PATH)/export_process.c
+			$(EXPORT_PATH)/export_utils.c $(EXPORT_PATH)/export_update.c \
+			$(EXPORT_PATH)/export_process.c $(EXPORT_PATH)/export_free.c \
+			\
 
 ### ---- TEMPORARY FILES ---- ###
 OBJ	= $(SRC:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)
@@ -86,7 +89,7 @@ all		: $(LIBFT) $(NAME)
 
 ### --- MINISHELL --- ###
 $(NAME)	: $(OBJ) $(LIBFT)
-	$(CC) $(COMPFLAGS)  $^ -lreadline -o $@
+	$(CC) $(COMPFLAGS)  $^ -lreadline -o  $@
 	@echo "$(GREEN)-- minishell ready --$(RESET_COLOR)"
 
 ### --- LIBFT --- ###
